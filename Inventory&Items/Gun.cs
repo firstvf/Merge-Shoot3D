@@ -1,18 +1,22 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Gun : MonoBehaviour
 {
+    public Item.ItemEnum GunItem { get; private set; }
+    public int GunLevel { get; private set; }
+
+    private TextMeshProUGUI _gunLevelText;
+    private Image _gunImage;
     private ItemSlot _slot;
 
-    private Image _gunImage;
-    public Item.ItemEnum GunItem { get; private set; }
-
-    public int GunLevel { get; private set; }
 
     private void Awake()
     {
+        _gunLevelText = GetComponentInChildren<TextMeshProUGUI>();
+        _gunLevelText.SetText((GunLevel + 1).ToString());
         if (_gunImage == null)
             _gunImage = GetComponent<Image>();
     }
@@ -22,6 +26,7 @@ public class Gun : MonoBehaviour
         if (GunLevel < Convert.ToInt32(Item.ItemEnum.M4a4))
             GunLevel++;
         GunItem = (Item.ItemEnum)GunLevel;
+        _gunLevelText.SetText((GunLevel + 1).ToString());
     }
 
     public void SetGun(Item item, ItemSlot slot)
@@ -45,6 +50,8 @@ public class Gun : MonoBehaviour
 
     public void DestroyGun()
     {
+        DragDropItemList.Singleton.ActiveAllRaycast();
+        DragDropItemList.Singleton.RemoveItemFromList(GetComponent<CanvasGroup>());
         _slot.SetFreeSlot();
         UI_Inventory.Singleton.RemoveGunFromInventory(this);
         Destroy(gameObject);

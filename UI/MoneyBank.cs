@@ -15,7 +15,7 @@ public class MoneyBank : MonoBehaviour
 
     private void Start()
     {
-        Money = 0;
+        Money = 9999999;
         _moneyText.SetText(Money.ToString());
     }
 

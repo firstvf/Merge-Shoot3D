@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MergeSystem : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class DragAndDropSystem : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     private RectTransform _rectTransform;
     private CanvasGroup _canvasGroup;
@@ -12,8 +12,14 @@ public class MergeSystem : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         _rectTransform = GetComponent<RectTransform>();
     }
 
+    private void Start()
+    {
+        DragDropItemList.Singleton.AddItemToList(_canvasGroup);
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
+        DragDropItemList.Singleton.DeactivateAllRaycastWhileDrag(_canvasGroup);
         _canvasGroup.alpha = 0.6f;
         _canvasGroup.blocksRaycasts = false;
     }
@@ -28,6 +34,7 @@ public class MergeSystem : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
         _canvasGroup.alpha = 1f;
         _canvasGroup.blocksRaycasts = true;
         _rectTransform.anchoredPosition = new Vector2(0, 0);
+        DragDropItemList.Singleton.ActiveAllRaycast();
     }
 
     public void OnPointerDown(PointerEventData eventData)
