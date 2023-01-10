@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MapController : MonoBehaviour
 {
+    [SerializeField] private Camera _mainCamera, _shopCamera;
+    [SerializeField] private GameObject _character;
+
     private PlayerAnimationController _playerAnimationController;
     private List<Enemy> _enemyList;
     private WaitForSeconds _checkerTimer;
@@ -32,11 +35,17 @@ public class MapController : MonoBehaviour
         StopCoroutine(_mapCoroutine);
         _isAbleToMoveMap = false;
         _playerAnimationController.SetIdleTrigger();
+        _mainCamera.gameObject.SetActive(false);
+        _shopCamera.gameObject.SetActive(true);
+        _character.transform.rotation = Quaternion.Euler(0, 90, 0);
     }
 
     public void ContinueMap()
     {
         _mapCoroutine = StartCoroutine(CheckEnemyOnMap());
+        _shopCamera.gameObject.SetActive(false);
+        _mainCamera.gameObject.SetActive(true);
+        _character.transform.rotation = Quaternion.identity;
     }
 
     private IEnumerator CheckEnemyOnMap()

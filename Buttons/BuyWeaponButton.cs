@@ -24,7 +24,7 @@ public class BuyWeaponButton : MonoBehaviour
         if (_bank.Money > _weaponCost&&_uiInventory.IsAnyEmptySlot())
         {
             _bank.WithdrawMoney(_weaponCost);
-            _weaponCost = (int)(_weaponCost * 1.5f);
+            _weaponCost = (int)(_weaponCost * 1.2f);
             _priceText.SetText(_weaponCost.ToString());
             _shop.CreateItemOnInventory();
         }

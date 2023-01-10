@@ -10,6 +10,10 @@ public class ItemSlot : MonoBehaviour, IDropHandler
     private bool _isSlotEmpty = true;
 
     public Gun GetGun() => _gun;
+    private void Awake()
+    {
+        _slotTransform = GetComponent<RectTransform>();
+    }
 
     public void SetGunInSlot(Gun gun)
     {
@@ -26,33 +30,37 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         _gun = null;
     }
 
-    private void Awake()
-    {
-        _slotTransform = GetComponent<RectTransform>();
-    }
-
     public void OnDrop(PointerEventData eventData)
     {
         if (_gun != null)
+            CheckSameWeapons(eventData);
+        else
+        {
+            if (eventData.pointerDrag != null)
+            {
+                var objectRTransform = eventData.pointerDrag.GetComponent<RectTransform>();
+                _gun = objectRTransform.GetComponent<Gun>();
+                objectRTransform.anchorMax = _slotTransform.anchorMax;
+                objectRTransform.anchorMin = _slotTransform.anchorMin;
+                objectRTransform.anchoredPosition = new Vector2(0, 0);
+                _gun.SetSlot(this);
+            }
+            DragDropItemList.Singleton.ActiveAllRaycast();
+        }
+    }
+
+    public void CheckSameWeapons(PointerEventData dragGun)
+    {
+        if (_gun != null && dragGun.pointerDrag.GetComponent<Gun>().GunLevel == _gun.GunLevel &&
+             dragGun.pointerDrag.GetComponent<Gun>() != this._gun)
         {
             _gun.UpgradeGun();
             _gun.SetGun(new Item(_gun.GunItem), this);
-
-            eventData.pointerDrag.GetComponent<Gun>().DestroyGun();
-            // eventData.pointerDrag.gameObject.SetActive(false);
-            if (_gun != null)
-                Player.Singleton.UpgradeWeapon(_gun.GunItem);
-            return;
+            Shop.Singleton.UpgradeWeapon();
+            Player.Singleton.UpgradeWeapon(_gun.GunItem);
+            dragGun.pointerDrag.GetComponent<Gun>().DestroyGun();
         }
-
-        if (eventData.pointerDrag != null)
-        {
-            var objectRTransform = eventData.pointerDrag.GetComponent<RectTransform>();
-            _gun = objectRTransform.GetComponent<Gun>();
-            objectRTransform.anchorMax = _slotTransform.anchorMax;
-            objectRTransform.anchorMin = _slotTransform.anchorMin;
-            objectRTransform.anchoredPosition = new Vector2(0, 0);
-            _gun.SetSlot(this);
-        }
+        else if (_gun != null && dragGun.pointerDrag.GetComponent<Gun>().GunLevel != _gun.GunLevel)
+            dragGun.pointerDrag.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
     }
 }

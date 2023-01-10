@@ -28,7 +28,5 @@ public class Inventory
 
         if (itemForDestroy > 0)
             _itemList.Remove(_itemList[itemForDestroy]);
-
-        Debug.Log(_itemList.Count);
     }
 }

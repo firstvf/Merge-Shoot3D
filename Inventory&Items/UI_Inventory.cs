@@ -10,7 +10,6 @@ public class UI_Inventory : MonoBehaviour
 
     private Inventory _inventory;
     private Transform _container;
-    private bool _isMainWeaponSettingsSet = false;
 
     private void Awake()
     {
@@ -29,12 +28,6 @@ public class UI_Inventory : MonoBehaviour
         _inventory.RemoveItem(gun);
     }
 
-    private void MainWeaponSettings(RectTransform gun)
-    {
-        _isMainWeaponSettingsSet = true;
-        gun.GetComponent<CanvasGroup>().blocksRaycasts = false;
-    }
-
     public void RefreshInventoryItems()
     {
         int itemSlot = 0;
@@ -48,7 +41,7 @@ public class UI_Inventory : MonoBehaviour
                 if (_container == null)
                     _container = transform;
                 RectTransform gunRTransform = Instantiate(_item, _container).GetComponent<RectTransform>();
-
+                gunRTransform.name = $"Gun: {itemSlot}";
                 item.SetGunInventory(gunRTransform.GetComponent<Gun>());
 
 
@@ -66,9 +59,6 @@ public class UI_Inventory : MonoBehaviour
                 gunRTransform.gameObject.SetActive(true);
 
                 gunRTransform.GetComponent<Image>().sprite = item.GetSprite();
-
-                if (!_isMainWeaponSettingsSet)
-                    MainWeaponSettings(gunRTransform);
             }
             itemSlot++;
         }
