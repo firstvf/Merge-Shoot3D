@@ -18,7 +18,7 @@ public class HealButton : MonoBehaviour
         if (_healCount > 0)
         {
             if (_player == null)
-                _player = Player.Singleton;
+                _player = Player.Instance;
             _player.Heal();
             _healCount--;
             _countText.SetText(_healCount.ToString());

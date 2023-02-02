@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class DragDropItemList : MonoBehaviour
 {
-    public static DragDropItemList Singleton { get; private set; }
+    public static DragDropItemList Instance { get; private set; }
 
     private List<CanvasGroup> _canvasGrpList;
 
     private void Awake()
     {
         _canvasGrpList = new List<CanvasGroup>();
-        Singleton = this;
+        Instance = this;
     }
 
     public void AddItemToList(CanvasGroup canv)

@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UI_Inventory : MonoBehaviour
 {
-    public static UI_Inventory Singleton { get; private set; }
+    public static UI_Inventory Instance { get; private set; }
 
     [SerializeField] private ItemSlot[] _itemSlot;
     [SerializeField] private Transform _item;
@@ -13,7 +12,7 @@ public class UI_Inventory : MonoBehaviour
 
     private void Awake()
     {
-        Singleton = this;
+        Instance = this;
         _container = transform;
     }
 
@@ -28,7 +27,7 @@ public class UI_Inventory : MonoBehaviour
         _inventory.RemoveItem(gun);
     }
 
-    public void RefreshInventoryItems()
+    public void RefreshInventoryItems(int itemLevel = 0)
     {
         int itemSlot = 0;
         bool isItemHoldSlot = false;
@@ -41,7 +40,7 @@ public class UI_Inventory : MonoBehaviour
                 if (_container == null)
                     _container = transform;
                 RectTransform gunRTransform = Instantiate(_item, _container).GetComponent<RectTransform>();
-                gunRTransform.name = $"Gun: {itemSlot}";
+
                 item.SetGunInventory(gunRTransform.GetComponent<Gun>());
 
 
@@ -51,14 +50,14 @@ public class UI_Inventory : MonoBehaviour
                         isItemHoldSlot = true;
                         gunRTransform.anchorMax = slot.GetComponent<RectTransform>().anchorMax;
                         gunRTransform.anchorMin = slot.GetComponent<RectTransform>().anchorMin;
-                        gunRTransform.GetComponent<Gun>().SetGun(new Item(0), slot);
+                        gunRTransform.GetComponent<Gun>().SetGun(new Item((Item.ItemEnum)itemLevel), slot);
                         continue;
                     }
 
                 gunRTransform.anchoredPosition = new Vector2(0, 0);
                 gunRTransform.gameObject.SetActive(true);
 
-                gunRTransform.GetComponent<Image>().sprite = item.GetSprite();
+                //   gunRTransform.GetComponent<Image>().sprite = item.GetSprite();
             }
             itemSlot++;
         }

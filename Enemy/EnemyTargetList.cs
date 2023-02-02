@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class EnemyTargetList : MonoBehaviour
 {
-    public static EnemyTargetList Singleton { get; private set; }
+    public static EnemyTargetList Instance { get; private set; }
     private List<Enemy> _enemyList;
 
     private void Awake()
     {
         _enemyList = new List<Enemy>();
-        Singleton = this;
+        Instance = this;
     }
 
     public List<Enemy> GetList() => _enemyList;    

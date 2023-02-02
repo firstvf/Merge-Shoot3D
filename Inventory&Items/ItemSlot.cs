@@ -45,7 +45,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                 objectRTransform.anchoredPosition = new Vector2(0, 0);
                 _gun.SetSlot(this);
             }
-            DragDropItemList.Singleton.ActiveAllRaycast();
+            DragDropItemList.Instance.ActiveAllRaycast();
         }
     }
 
@@ -56,8 +56,8 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         {
             _gun.UpgradeGun();
             _gun.SetGun(new Item(_gun.GunItem), this);
-            Shop.Singleton.UpgradeWeapon();
-            Player.Singleton.UpgradeWeapon(_gun.GunItem);
+            Shop.Instance.UpgradeWeapon();
+            Player.Instance.UpgradeWeapon(_gun.GunItem);
             dragGun.pointerDrag.GetComponent<Gun>().DestroyGun();
         }
         else if (_gun != null && dragGun.pointerDrag.GetComponent<Gun>().GunLevel != _gun.GunLevel)

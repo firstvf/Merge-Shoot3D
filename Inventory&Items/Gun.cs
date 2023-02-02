@@ -8,14 +8,15 @@ public class Gun : MonoBehaviour
     public Item.ItemEnum GunItem { get; private set; }
     public int GunLevel { get; private set; }
 
-    private TextMeshProUGUI _gunLevelText;
+    [SerializeField] private TextMeshProUGUI _gunLevelText;
+
     private Image _gunImage;
     private ItemSlot _slot;
 
 
     private void Awake()
     {
-        _gunLevelText = GetComponentInChildren<TextMeshProUGUI>();
+       // _gunLevelText = GetComponentInChildren<TextMeshProUGUI>();
         _gunLevelText.SetText((GunLevel + 1).ToString());
         if (_gunImage == null)
             _gunImage = GetComponent<Image>();
@@ -23,7 +24,7 @@ public class Gun : MonoBehaviour
 
     public void UpgradeGun()
     {
-        if (GunLevel < Convert.ToInt32(Item.ItemEnum.M4a4))
+        if (GunLevel < Convert.ToInt32(Item.ItemEnum.M249))
             GunLevel++;
         GunItem = (Item.ItemEnum)GunLevel;
         _gunLevelText.SetText((GunLevel + 1).ToString());
@@ -32,7 +33,7 @@ public class Gun : MonoBehaviour
     public void SetGun(Item item, ItemSlot slot)
     {
         GunItem = item.ItemType;
-
+        GunLevel = (int)item.ItemType;
         if (_gunImage == null)
             _gunImage = GetComponent<Image>();
 
@@ -50,10 +51,10 @@ public class Gun : MonoBehaviour
 
     public void DestroyGun()
     {
-        DragDropItemList.Singleton.ActiveAllRaycast();
-        DragDropItemList.Singleton.RemoveItemFromList(GetComponent<CanvasGroup>());
+        DragDropItemList.Instance.ActiveAllRaycast();
+        DragDropItemList.Instance.RemoveItemFromList(GetComponent<CanvasGroup>());
         _slot.SetFreeSlot();
-        UI_Inventory.Singleton.RemoveGunFromInventory(this);
+        UI_Inventory.Instance.RemoveGunFromInventory(this);
         Destroy(gameObject);
     }
 }

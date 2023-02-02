@@ -16,7 +16,7 @@ public class HealthBar : MonoBehaviour
         _startPosition = transform.position;
         if (_healthBar.activeInHierarchy)
             _isAbleToMove = true;
-        _popup = DamagePopupSpawner.Singleton;
+        _popup = DamagePopupSpawner.Instance;
     }
 
     private void OnEnable()
@@ -44,7 +44,7 @@ public class HealthBar : MonoBehaviour
     public void UpdateHealthBar(int currentHealth, int damage, bool isHeal = false)
     {
         if (_popup == null)
-            _popup = DamagePopupSpawner.Singleton;
+            _popup = DamagePopupSpawner.Instance;
         if (isHeal)
             _popup.CreateDamagePopupFromPool(new Vector3
                 (_parentPrefab.transform.position.x, _startPosition.y + 0.5f, _parentPrefab.transform.position.z), 100, true);

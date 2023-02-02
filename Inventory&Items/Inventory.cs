@@ -10,7 +10,7 @@ public class Inventory
     public Inventory()
     {
         _itemList = new List<Item>();
-        AddItem(new Item(Item.ItemEnum.Pistol));
+        AddItem(new Item(Item.ItemEnum.Glock));
     }
 
     public void AddItem(Item item)
@@ -26,7 +26,6 @@ public class Inventory
             if (_itemList[i].InventoryGun == gun)
                 itemForDestroy = i;
 
-        if (itemForDestroy > 0)
-            _itemList.Remove(_itemList[itemForDestroy]);
+        _itemList.Remove(_itemList[itemForDestroy]);
     }
 }
