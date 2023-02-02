@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class CoinIcon : MonoBehaviour
 {
-    public static CoinIcon Singleton { get; private set; }
+    public static CoinIcon Instance { get; private set; }
 
     private void Awake()
     {
-        Singleton = this;
+        Instance = this;
     }
 }

@@ -29,7 +29,7 @@ public class Coin : MonoBehaviour
         yield return _lootTimer;
 
         if (_destinationPoint == null)
-            _destinationPoint = CoinIcon.Singleton;
+            _destinationPoint = CoinIcon.Instance;
         _isAbleToMove = true;
     }
 
@@ -56,8 +56,8 @@ public class Coin : MonoBehaviour
         if (_isAbleToLoot)
         {
             if (_bank == null)
-                _bank = MoneyBank.Singleton;
-            _bank.AddMoney();
+                _bank = MoneyBank.Instance;
+            _bank.AddMoney(5);
         }
         _isAbleToMove = false;
     }

@@ -14,6 +14,11 @@ public class DamagePopup : MonoBehaviour
         _hideTimer = new WaitForSeconds(0.45f);
     }
 
+    private void Update()
+    {
+        transform.Translate(-Vector3.down * 1f * Time.deltaTime);
+    }
+
     private void OnEnable()
     {
         StartCoroutine(HideDamagePopup());
@@ -29,8 +34,9 @@ public class DamagePopup : MonoBehaviour
     {
         _damageText.SetText(damageAmount.ToString());
         transform.position = new Vector3(
-            Random.Range(position.x - 0.25f, position.x + 0.25f),
-            Random.Range(position.y, position.y + 0.25f),
+           // Random.Range(position.x - 0.25f, position.x + 0.25f),
+           Random.Range(position.x - 0.5f, position.x + 0.5f),
+            Random.Range(position.y - 0.15f, position.y + 0.55f),
             position.z);
     }
 }

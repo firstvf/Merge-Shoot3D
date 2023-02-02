@@ -8,21 +8,32 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private HealthBar _hpBar;
     [SerializeField] private GameObject _parentPrefab;
+    [SerializeField] private VisualEffectsController _vfx;
+    [SerializeField] private EnemyAnimationController _animationController;
 
     private Player _player;
     private int _maxHealth;
     private int _damage;
-    private EnemyAnimationController _animationController;
     private WaitForSeconds _deathTimer;
     private CoinSpawner _coinSpawner;
+
+    /// <summary>
+    /// TEST variable
+    /// </summary>
+    public bool IsTest = false;
 
     private void Awake()
     {
         _deathTimer = new WaitForSeconds(1.5f);
-        _animationController = GetComponent<EnemyAnimationController>();
-        _player = Player.Singleton;
+        _player = Player.Instance;
         _damage = 9;
-        _maxHealth = 100;
+        _maxHealth = 200;
+        IsTest = false;
+        if (IsTest)
+        {
+            _damage = 1;
+            _maxHealth = 3000;
+        }
         AttackRange = 1;
     }
 
@@ -36,7 +47,7 @@ public class Enemy : MonoBehaviour
         transform.position = _parentPrefab.transform.position;
         CurrentHealth = _maxHealth;
         _hpBar.HealthBarSettings(_maxHealth);
-        EnemyTargetList.Singleton.AddToEnemyList(this);
+        EnemyTargetList.Instance.AddToEnemyList(this);
     }
 
     public void Attack()
@@ -53,9 +64,10 @@ public class Enemy : MonoBehaviour
         {
             CurrentHealth -= randomDamage;
             _hpBar.UpdateHealthBar(CurrentHealth, randomDamage);
+            _vfx.PlayVFX();
             if (CurrentHealth <= 0)
             {
-                gameObject.GetComponent<Animator>().SetTrigger("Die");
+                _animationController.SetDieTrigger();
                 StartCoroutine(Die());
             }
         }
@@ -63,15 +75,21 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Die()
     {
-        if (_coinSpawner == null)
-            _coinSpawner = CoinSpawner.Singleton;
-        _coinSpawner.CreateCoinFromPool(transform.position);
+        if (!IsTest)
+        {
+            int moneyCount = Random.Range(1, 5);
+            if (_coinSpawner == null)
+                _coinSpawner = CoinSpawner.Instance;
+            for (int i = 0; i < moneyCount; i++)
+                _coinSpawner.CreateCoinFromPool(transform.position);
+        }
+
         yield return _deathTimer;
         _parentPrefab.SetActive(false);
     }
 
     private void OnDisable()
     {
-        EnemyTargetList.Singleton.RemoveFromEnemyList(this);
+        EnemyTargetList.Instance.RemoveFromEnemyList(this);
     }
 }

@@ -1,19 +1,34 @@
 using System.Collections;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class ZombieSpawner : MonoBehaviour
 {
     [SerializeField] GameObject[] _spawnPoints;
-    [SerializeField] GameObject _enemy;
-    private EnemyPooler _pooler;
+    [SerializeField] Zombie _enemy;
+
+    private MonobehObjectPooler<Zombie> _pooler;
     private bool _isCoroutineStarted;
     private bool _isAbleToSpawn = true;
     private WaitForSeconds _spawnTimer;
 
+    // TEST
+    public bool IsAbleToSpawnTest;
+    public int MobCount;
+
     private void Start()
     {
         _spawnTimer = new WaitForSeconds(1f);
-        _pooler = new EnemyPooler(_enemy, 3, _spawnPoints,transform);
+        _pooler = new MonobehObjectPooler<Zombie>(_enemy, transform, 3);
+    }
+
+    private void Update()
+    {
+        // TEST
+        if (IsAbleToSpawnTest)
+        {
+            IsAbleToSpawnTest = false;
+            StartCoroutine(SpawnCoroutine(MobCount));
+        }
     }
 
     public void SpawnControlPoint()
@@ -37,7 +52,8 @@ public class Spawner : MonoBehaviour
         int spawnCount = 0;
         while (spawnCount < count)
         {
-            var prefab = _pooler.GetFreeUnit();
+            var prefab = _pooler.GetFreeMonobehObject();
+            prefab.transform.position = _spawnPoints[Random.Range(0, _spawnPoints.Length)].transform.position;
             spawnCount++;
             yield return _spawnTimer;
         }

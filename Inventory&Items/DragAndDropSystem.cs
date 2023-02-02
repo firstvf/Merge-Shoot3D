@@ -14,12 +14,12 @@ public class DragAndDropSystem : MonoBehaviour, IPointerDownHandler, IBeginDragH
 
     private void Start()
     {
-        DragDropItemList.Singleton.AddItemToList(_canvasGroup);
+        DragDropItemList.Instance.AddItemToList(_canvasGroup);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        DragDropItemList.Singleton.DeactivateAllRaycastWhileDrag(_canvasGroup);
+        DragDropItemList.Instance.DeactivateAllRaycastWhileDrag(_canvasGroup);
         _canvasGroup.alpha = 0.6f;
         _canvasGroup.blocksRaycasts = false;
     }
@@ -34,7 +34,7 @@ public class DragAndDropSystem : MonoBehaviour, IPointerDownHandler, IBeginDragH
         _canvasGroup.alpha = 1f;
         _canvasGroup.blocksRaycasts = true;
         _rectTransform.anchoredPosition = new Vector2(0, 0);
-        DragDropItemList.Singleton.ActiveAllRaycast();
+        DragDropItemList.Instance.ActiveAllRaycast();
     }
 
     public void OnPointerDown(PointerEventData eventData)

@@ -6,6 +6,7 @@ public class MapController : MonoBehaviour
 {
     [SerializeField] private Camera _mainCamera, _shopCamera;
     [SerializeField] private GameObject _character;
+    [SerializeField] private GameObject _canvasObject;
 
     private PlayerAnimationController _playerAnimationController;
     private List<Enemy> _enemyList;
@@ -15,9 +16,11 @@ public class MapController : MonoBehaviour
 
     private void Start()
     {
+        if(!_canvasObject.activeInHierarchy)
+            _canvasObject.SetActive(true);
         _checkerTimer = new WaitForSeconds(0.5f);
-        _enemyList = EnemyTargetList.Singleton.GetList();
-        _playerAnimationController = Player.Singleton.GetComponent<PlayerAnimationController>();
+        _enemyList = EnemyTargetList.Instance.GetList();
+        _playerAnimationController = Player.Instance.GetComponent<PlayerAnimationController>();
         _mapCoroutine = StartCoroutine(CheckEnemyOnMap());
     }
 
@@ -69,7 +72,10 @@ public class MapController : MonoBehaviour
 
     private void ResetMap()
     {
-        if (transform.position.x <= -78)
-            transform.position = new Vector3(34, 0, 0);
+        //if (transform.position.x <= -78)
+        //    transform.position = new Vector3(34, 0, 0);
+
+        if (transform.position.x <= -68)
+            transform.position = new Vector3(74, 0, 0);
     }
 }

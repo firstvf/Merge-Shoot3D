@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SpawnerControlPoint : MonoBehaviour
 {
-    [SerializeField] private Spawner _spawner;
+    [SerializeField] private ZombieSpawner _spawner;
 
     private void OnTriggerEnter(Collider other)
     {

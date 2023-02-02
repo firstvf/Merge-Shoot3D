@@ -13,9 +13,9 @@ public class PlayerAnimationController : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void ChangeRifleLayer()
+    public void ChangeAimState(bool isRifleState)
     {
-        _animator.SetBool("IsRifleState", true);
+        _animator.SetBool("IsRifleState", isRifleState);
     }
 
     public void SetIdleTrigger()

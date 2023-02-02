@@ -16,14 +16,14 @@ public class EnemyMovement : MonoBehaviour
     private void Start()
     {
         if (_player == null)
-            _player = Player.Singleton;
+            _player = Player.Instance;
         _isAbleToMove = true;
     }
 
     private void OnEnable()
     {
         if (_player == null)
-            _player = Player.Singleton;
+            _player = Player.Instance;
         _isAbleToMove = true;
 
     }
