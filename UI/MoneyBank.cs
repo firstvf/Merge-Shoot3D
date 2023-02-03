@@ -4,11 +4,9 @@ using UnityEngine;
 public class MoneyBank : MonoBehaviour
 {
     public static MoneyBank Instance { get; private set; }
-    public ulong Money { get; private set; }
+    public uint Money { get; private set; }
 
     [SerializeField] private TextMeshProUGUI _moneyText;
-
-    private readonly string[] FORMAT_NAMES = { "", "K", "M", "B", "T" };
 
     // TEST
     public bool IsTest = false;
@@ -21,8 +19,8 @@ public class MoneyBank : MonoBehaviour
 
     private void Start()
     {
-        Money = 100000000;
-        FormatTextMoney();
+        Money = 100000;
+        _moneyText.SetText(FormatText.FormatTextMoney(Money));
     }
 
     private void Update()
@@ -30,33 +28,19 @@ public class MoneyBank : MonoBehaviour
         if (IsTest)
         {
             IsTest = false;
-            AddMoney((ulong)CheatValue);
+            AddMoney((uint)CheatValue);
         }
     }
 
-    public void AddMoney(ulong money)
+    public void AddMoney(uint money)
     {
         Money += money;
-        FormatTextMoney();
+        _moneyText.SetText(FormatText.FormatTextMoney(Money));
     }
 
-    public void WithdrawMoney(ulong money)
+    public void WithdrawMoney(uint money)
     {
         Money -= money;
-        FormatTextMoney();
-    }
-
-    private void FormatTextMoney()
-    {
-        var formatMoney = Money;
-        int counter = 0;
-
-        while (counter + 1 < FORMAT_NAMES.Length && formatMoney >= 1000)
-        {
-            formatMoney /= 1000;
-            counter++;
-        }
-
-        _moneyText.SetText(formatMoney.ToString("#.##") + FORMAT_NAMES[counter]);
+        _moneyText.SetText(FormatText.FormatTextMoney(Money));
     }
 }

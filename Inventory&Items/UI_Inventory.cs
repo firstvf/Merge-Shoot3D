@@ -14,12 +14,15 @@ public class UI_Inventory : MonoBehaviour
     {
         Instance = this;
         _container = transform;
+        for (int i = 0; i < _itemSlot.Length; i++)
+            _itemSlot[i].SetSlotNumber(i);
     }
 
+    public Inventory GetInventory() => _inventory;
     public void SetInventory(Inventory inventory)
     {
         this._inventory = inventory;
-        RefreshInventoryItems();
+        AddItemInUiInventory();
     }
 
     public void RemoveGunFromInventory(Gun gun)
@@ -27,7 +30,7 @@ public class UI_Inventory : MonoBehaviour
         _inventory.RemoveItem(gun);
     }
 
-    public void RefreshInventoryItems(int itemLevel = 0)
+    public void AddItemInUiInventory(int itemLevel = 0, bool isGameLoaded = false, int loadedHoldSlot = 0)
     {
         int itemSlot = 0;
         bool isItemHoldSlot = false;
@@ -35,29 +38,47 @@ public class UI_Inventory : MonoBehaviour
         {
             if (!item.IsInInventory && itemSlot < _itemSlot.Length)
             {
-                item.IsInInventory = true;
-
+                item.SetItemInInventory();
                 if (_container == null)
                     _container = transform;
                 RectTransform gunRTransform = Instantiate(_item, _container).GetComponent<RectTransform>();
 
                 item.SetGunInventory(gunRTransform.GetComponent<Gun>());
 
+                if (!isGameLoaded)
+                {
+                    //foreach (var slot in _itemSlot)
+                    //    if (!isItemHoldSlot && slot.IsSlotEmpty)
+                    //    {
+                    //        isItemHoldSlot = true;
+                    //        gunRTransform.anchorMax = slot.GetComponent<RectTransform>().anchorMax;
+                    //        gunRTransform.anchorMin = slot.GetComponent<RectTransform>().anchorMin;
+                    //        gunRTransform.GetComponent<Gun>().SetGun(new Item((Item.ItemEnum)itemLevel), slot);
+                    //        continue;
+                    //    }
 
-                foreach (var slot in _itemSlot)
-                    if (!isItemHoldSlot && slot.IsSlotEmpty)
-                    {
-                        isItemHoldSlot = true;
-                        gunRTransform.anchorMax = slot.GetComponent<RectTransform>().anchorMax;
-                        gunRTransform.anchorMin = slot.GetComponent<RectTransform>().anchorMin;
-                        gunRTransform.GetComponent<Gun>().SetGun(new Item((Item.ItemEnum)itemLevel), slot);
-                        continue;
-                    }
+                    for (int i = 0; i < _itemSlot.Length; i++)
+                        if (!isItemHoldSlot && _itemSlot[i].IsSlotEmpty)
+                        {
+                            isItemHoldSlot = true;
+                            gunRTransform.anchorMax = _itemSlot[i].GetComponent<RectTransform>().anchorMax;
+                            gunRTransform.anchorMin = _itemSlot[i].GetComponent<RectTransform>().anchorMin;
+                            gunRTransform.GetComponent<Gun>().SetGun(new Item((Item.ItemEnum)itemLevel), _itemSlot[i]);
+
+                        }
+                }
+                else
+                {
+                    var slot = _itemSlot[loadedHoldSlot];
+                    isItemHoldSlot = true;
+                    gunRTransform.anchorMax = slot.GetComponent<RectTransform>().anchorMax;
+                    gunRTransform.anchorMin = slot.GetComponent<RectTransform>().anchorMin;
+                    gunRTransform.GetComponent<Gun>().SetGun(new Item((Item.ItemEnum)itemLevel), slot);
+
+                }
 
                 gunRTransform.anchoredPosition = new Vector2(0, 0);
                 gunRTransform.gameObject.SetActive(true);
-
-                //   gunRTransform.GetComponent<Image>().sprite = item.GetSprite();
             }
             itemSlot++;
         }

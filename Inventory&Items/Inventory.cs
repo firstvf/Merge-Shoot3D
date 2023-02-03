@@ -1,16 +1,14 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Inventory
 {
-    private List<Item> _itemList;
+    private readonly List<Item> _itemList;
 
     public List<Item> GetItemList() => _itemList;
 
     public Inventory()
     {
-        _itemList = new List<Item>();
-        AddItem(new Item(Item.ItemEnum.Glock));
+        _itemList = new List<Item>();   
     }
 
     public void AddItem(Item item)

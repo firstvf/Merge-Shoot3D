@@ -3,13 +3,16 @@ using UnityEngine.EventSystems;
 
 public class ItemSlot : MonoBehaviour, IDropHandler
 {
-    public bool IsSlotEmpty => _isSlotEmpty;
-
+    private int _slotNumber;
     private RectTransform _slotTransform;
     private Gun _gun;
     private bool _isSlotEmpty = true;
 
+    public bool IsSlotEmpty => _isSlotEmpty;
+    public void SetSlotNumber(int number) => _slotNumber = number;
+    public int GetSlotNumber() => _slotNumber;
     public Gun GetGun() => _gun;
+
     private void Awake()
     {
         _slotTransform = GetComponent<RectTransform>();
@@ -49,7 +52,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         }
     }
 
-    public void CheckSameWeapons(PointerEventData dragGun)
+    private void CheckSameWeapons(PointerEventData dragGun)
     {
         if (_gun != null && dragGun.pointerDrag.GetComponent<Gun>().GunLevel == _gun.GunLevel &&
              dragGun.pointerDrag.GetComponent<Gun>() != this._gun)

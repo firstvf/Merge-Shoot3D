@@ -7,16 +7,14 @@ public class Gun : MonoBehaviour
 {
     public Item.ItemEnum GunItem { get; private set; }
     public int GunLevel { get; private set; }
+    public ItemSlot GunSlot { get; private set; }
 
     [SerializeField] private TextMeshProUGUI _gunLevelText;
 
     private Image _gunImage;
-    private ItemSlot _slot;
-
 
     private void Awake()
     {
-       // _gunLevelText = GetComponentInChildren<TextMeshProUGUI>();
         _gunLevelText.SetText((GunLevel + 1).ToString());
         if (_gunImage == null)
             _gunImage = GetComponent<Image>();
@@ -43,17 +41,17 @@ public class Gun : MonoBehaviour
 
     public void SetSlot(ItemSlot slot)
     {
-        if (_slot != null)
-            _slot.SetFreeSlot();
-        _slot = slot;
-        _slot.SetGunInSlot(this);
+        if (GunSlot != null)
+            GunSlot.SetFreeSlot();
+        GunSlot = slot;
+        GunSlot.SetGunInSlot(this);
     }
 
     public void DestroyGun()
     {
         DragDropItemList.Instance.ActiveAllRaycast();
         DragDropItemList.Instance.RemoveItemFromList(GetComponent<CanvasGroup>());
-        _slot.SetFreeSlot();
+        GunSlot.SetFreeSlot();
         UI_Inventory.Instance.RemoveGunFromInventory(this);
         Destroy(gameObject);
     }
