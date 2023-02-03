@@ -4,13 +4,11 @@ public class Item
 {
     public ItemEnum ItemType { get; private set; }
     public Gun InventoryGun { get; private set; }
+    public bool IsInInventory { get; private set; }
 
-    public bool IsInInventory;
+    public void SetItemInInventory() => IsInInventory = true;
 
-    public void SetGunInventory(Gun gun)
-    {
-        InventoryGun = gun;
-    }
+    public void SetGunInventory(Gun gun) => InventoryGun = gun; 
 
     public enum ItemEnum
     {
