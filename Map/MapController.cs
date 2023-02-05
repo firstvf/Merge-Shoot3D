@@ -16,7 +16,7 @@ public class MapController : MonoBehaviour
 
     private void Start()
     {
-        if(!_canvasObject.activeInHierarchy)
+        if (!_canvasObject.activeInHierarchy)
             _canvasObject.SetActive(true);
         _checkerTimer = new WaitForSeconds(0.5f);
         _enemyList = EnemyTargetList.Instance.GetList();
@@ -72,10 +72,12 @@ public class MapController : MonoBehaviour
 
     private void ResetMap()
     {
-        //if (transform.position.x <= -78)
-        //    transform.position = new Vector3(34, 0, 0);
-
         if (transform.position.x <= -68)
             transform.position = new Vector3(74, 0, 0);
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveSystem.SaveGame();
     }
 }
