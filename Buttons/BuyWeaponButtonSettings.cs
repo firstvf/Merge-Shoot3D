@@ -7,16 +7,30 @@ public class BuyWeaponButtonSettings : MonoBehaviour
 
     [SerializeField] private BuyWeaponButton _mainBuyWeaponButton;
 
-    private readonly Dictionary<int, uint> _weaponsCostDictionary = new();
+    private  Dictionary<int, uint> _weaponsCostDictionary;
     private readonly List<BuyWeaponButton> _buttonsList = new();
+
+    public Dictionary<int, uint> GetWeaponsCostDictionary() => _weaponsCostDictionary;
+    public int GetMainWeaponButtonLevel() => _mainBuyWeaponButton.CurrentWeaponLevel;
 
     private void Awake()
     {
-        uint startWeaponCost = 50;
-        for (int i = 0; i < 17; i++)
+        if(SaveSystem.LoadGame() == null)
         {
-            _weaponsCostDictionary.Add(i, (uint)(startWeaponCost * (i + 1)));
-            startWeaponCost += startWeaponCost;
+            uint startWeaponCost = 50;
+            _weaponsCostDictionary = new();
+            for (int i = 0; i < 17; i++)
+            {
+                _weaponsCostDictionary.Add(i, (uint)(startWeaponCost * (i + 1)));
+                startWeaponCost += startWeaponCost;
+            }
+        }
+        else
+        {
+            _weaponsCostDictionary = new();
+            var load = SaveSystem.LoadGame();
+            _weaponsCostDictionary = load.GetWeaponsCost();
+            _mainBuyWeaponButton.SetButtonSettings(load.GetWeaponButtonLevel());
         }
 
         Instance = this;

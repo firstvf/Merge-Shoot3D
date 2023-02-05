@@ -4,30 +4,30 @@ using UnityEngine;
 
 public static class SaveSystem
 {
-    public static void SaveInventory()
+    public static void SaveGame()
     {
         var formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/inventory.dat";
+        string path = Application.persistentDataPath + "/game.dat";
 
-        var stream = new FileStream(path, FileMode.Create);
-        var inventoryData = new InventoryData(UI_Inventory.Instance.GetInventory());
+        var stream = new FileStream(path, FileMode.Create);        
+        var gameData = new GameData();
 
-        formatter.Serialize(stream, inventoryData);
+        formatter.Serialize(stream, gameData);
         stream.Close();
     }
 
-    public static InventoryData LoadInventory()
+    public static GameData LoadGame()
     {
-        string path = Application.persistentDataPath + "/inventory.dat";
+        string path = Application.persistentDataPath + "/game.dat";
         if (File.Exists(path))
         {
             var formatter = new BinaryFormatter();
             var stream = new FileStream(path, FileMode.Open);
 
-            var inventoryData = (InventoryData)formatter.Deserialize(stream);
+            var gameData = (GameData)formatter.Deserialize(stream);
             stream.Close();
 
-            return inventoryData;
+            return gameData;
         }
         else return null;
     }

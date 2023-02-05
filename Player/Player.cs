@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _attackRange;
 
     private VisualEffect _weaponVFX;
-    private VisualEffectsController _vfxController;
+    //private VisualEffectsController _vfxController;
     private PlayerAnimationController _animationController;
     private WaitForSeconds _defaultAttackSpeed;
     private WaitForSeconds _reloading;
@@ -31,22 +31,23 @@ public class Player : MonoBehaviour
     private bool _isAbleToShoot;
     private bool _isReloadingCoroutineStarted;
 
-
-    // TEST
-    public int TestWeaponLevel;
-    public bool IsTestUpgradeWeapon;
-
     private void Awake()
     {
         _animationController = GetComponent<PlayerAnimationController>();
         _audioSource = GetComponent<AudioSource>();
         Instance = this;
         _baseRotation = transform.rotation;
-        _vfxController = _weapons[CurrentWeaponLevel].GetComponentInChildren<VisualEffectsController>();
+       // _vfxController = _weapons[CurrentWeaponLevel].GetComponentInChildren<VisualEffectsController>();
     }
 
     private void Start()
     {
+        if (SaveSystem.LoadGame() != null)
+        {
+            UpgradeWeapon((Item.ItemEnum)SaveSystem.LoadGame().GetPlayerWeaponLevel());
+            Debug.Log($"Current weapon level: {CurrentWeaponLevel}");
+        }
+        
         _isAbleToShoot = true;
         _targetList = EnemyTargetList.Instance.GetList();
         _maxHealth = 100;
@@ -57,20 +58,6 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        // Test
-        if (IsTestUpgradeWeapon)
-        {
-            IsTestUpgradeWeapon = false;
-            foreach (var item in _weapons)
-            {
-                item.SetActive(false);
-                _weapons[TestWeaponLevel].SetActive(true);
-                _vfxController = null;
-            }
-            CurrentWeaponSettings(_weapons[TestWeaponLevel].GetComponent<Weapon>());
-        }
-        // Test
-
         if (!IsTargetSet && _targetList.Count > 0)
             LookingForTarget();
     }
@@ -87,7 +74,7 @@ public class Player : MonoBehaviour
             _weapons[CurrentWeaponLevel].SetActive(true);
             CurrentWeaponSettings(_weapons[CurrentWeaponLevel].GetComponent<Weapon>());
 
-            _vfxController = null;
+         //   _vfxController = null;
         }
     }
 
@@ -99,7 +86,6 @@ public class Player : MonoBehaviour
         _shotsCountAtTime = weapon.ShotsCountAtTime;
         _damage = weapon.Damage;
         _shootSound = weapon.GetWeaponSound;
-
         _weaponVFX = weapon.GetWeaponVFX;
     }
 

@@ -20,18 +20,14 @@ public class Shop : MonoBehaviour
 
     private void Start()
     {
-        if (SaveSystem.LoadInventory() == null)
+        if (SaveSystem.LoadGame() == null)
             CreateItemOnInventory();
         else
         {
-            var inventory = SaveSystem.LoadInventory().GetInventory();
+            var inventory = SaveSystem.LoadGame().GetInventory();
 
             foreach (var item in inventory)
-            {
-                Debug.Log($"Gun level:{item.Item1}\tGun slot:{item.Item2}");
                 CreateItemOnInventory(item.Item1, true, item.Item2);
-            }
-                
         }
     }
 
@@ -44,10 +40,5 @@ public class Shop : MonoBehaviour
     public void UpgradeWeapon()
     {
         _audioSource.PlayOneShot(_upgradeSound);
-    }
-
-    private void OnApplicationQuit()
-    {
-        SaveSystem.SaveInventory();
     }
 }
