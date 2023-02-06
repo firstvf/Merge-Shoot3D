@@ -8,16 +8,15 @@ public class Gun : MonoBehaviour
     public Item.ItemEnum GunItem { get; private set; }
     public int GunLevel { get; private set; }
     public ItemSlot GunSlot { get; private set; }
+    public Image GunImage { get; private set; }
 
     [SerializeField] private TextMeshProUGUI _gunLevelText;
-
-    private Image _gunImage;
 
     private void Awake()
     {
         _gunLevelText.SetText((GunLevel + 1).ToString());
-        if (_gunImage == null)
-            _gunImage = GetComponent<Image>();
+        if (GunImage == null)
+            GunImage = GetComponent<Image>();
     }
 
     public void UpgradeGun()
@@ -32,10 +31,10 @@ public class Gun : MonoBehaviour
     {
         GunItem = item.ItemType;
         GunLevel = (int)item.ItemType;
-        if (_gunImage == null)
-            _gunImage = GetComponent<Image>();
+        if (GunImage == null)
+            GunImage = GetComponent<Image>();
 
-        _gunImage.sprite = item.GetSprite();
+        GunImage.sprite = item.GetSprite();
         SetSlot(slot);
     }
 

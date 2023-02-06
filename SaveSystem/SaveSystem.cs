@@ -4,12 +4,14 @@ using UnityEngine;
 
 public static class SaveSystem
 {
+    private static GameData _gameData = null;
+
     public static void SaveGame()
     {
         var formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/game.dat";
 
-        var stream = new FileStream(path, FileMode.Create);        
+        var stream = new FileStream(path, FileMode.Create);
         var gameData = new GameData();
 
         formatter.Serialize(stream, gameData);
@@ -18,6 +20,9 @@ public static class SaveSystem
 
     public static GameData LoadGame()
     {
+        if (_gameData != null)
+            return _gameData;
+
         string path = Application.persistentDataPath + "/game.dat";
         if (File.Exists(path))
         {
@@ -26,6 +31,7 @@ public static class SaveSystem
 
             var gameData = (GameData)formatter.Deserialize(stream);
             stream.Close();
+            _gameData = gameData;
 
             return gameData;
         }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +16,6 @@ public class Player : MonoBehaviour
     [SerializeField] private float _attackRange;
 
     private VisualEffect _weaponVFX;
-    //private VisualEffectsController _vfxController;
     private PlayerAnimationController _animationController;
     private WaitForSeconds _defaultAttackSpeed;
     private WaitForSeconds _reloading;
@@ -37,16 +35,12 @@ public class Player : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         Instance = this;
         _baseRotation = transform.rotation;
-       // _vfxController = _weapons[CurrentWeaponLevel].GetComponentInChildren<VisualEffectsController>();
     }
 
     private void Start()
     {
-        if (SaveSystem.LoadGame() != null)
-        {
-            UpgradeWeapon((Item.ItemEnum)SaveSystem.LoadGame().GetPlayerWeaponLevel());
-            Debug.Log($"Current weapon level: {CurrentWeaponLevel}");
-        }
+        if (SaveSystem.LoadGame() != null)        
+            UpgradeWeapon((Item.ItemEnum)SaveSystem.LoadGame().GetPlayerWeaponLevel());        
         
         _isAbleToShoot = true;
         _targetList = EnemyTargetList.Instance.GetList();
@@ -73,8 +67,6 @@ public class Player : MonoBehaviour
 
             _weapons[CurrentWeaponLevel].SetActive(true);
             CurrentWeaponSettings(_weapons[CurrentWeaponLevel].GetComponent<Weapon>());
-
-         //   _vfxController = null;
         }
     }
 
