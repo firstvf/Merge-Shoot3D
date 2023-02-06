@@ -19,7 +19,10 @@ public class MoneyBank : MonoBehaviour
 
     private void Start()
     {
-        Money = 100000;
+        if (SaveSystem.LoadGame() != null)
+            Money = SaveSystem.LoadGame().GetMoney();
+        else Money = 0;
+
         _moneyText.SetText(FormatText.FormatTextMoney(Money));
     }
 
